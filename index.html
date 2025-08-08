@@ -1,210 +1,357 @@
 <!doctype html>
 <html lang="ko" class="scroll-smooth">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Ian Hwang — Personal Landing</title>
-    <meta name="description" content="Modern & minimal personal portfolio of Ian Hwang" />
-    <meta property="og:title" content="Ian Hwang — Portfolio" />
-    <meta property="og:description" content="Modern & minimal personal portfolio" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://avatars.githubusercontent.com/u/0?v=4" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Ctext y='32' x='8' font-size='32'%3E👋%3C/text%3E%3C/svg%3E" />
-    <!-- Tailwind (CDN, 빌드 불필요) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      // Tailwind 커스텀 컬러(선택)
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              ink: "#0b0f19",
-              fog: "#f7f7fb",
-              accent: "#4f46e5",
-            },
-          },
-        },
-      };
-    </script>
-    <style>
-      /* 부드러운 진입 애니메이션 */
-      .fade-up { opacity: 0; transform: translateY(8px); animation: fadeUp .6s ease forwards; }
-      .fade-up.delay-1 { animation-delay: .1s; }
-      .fade-up.delay-2 { animation-delay: .2s; }
-      .fade-up.delay-3 { animation-delay: .3s; }
-      @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ian Hwang — Portfolio</title>
+  <meta name="description" content="Modern, minimal, and interactive personal landing page of Ian Hwang" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Ctext y='32' x='8' font-size='32'%3E✨%3C/text%3E%3C/svg%3E" />
 
-      /* 깔끔한 카드 호버 */
-      .card { transition: transform .2s ease, box-shadow .2s ease; }
-      .card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,.08); }
-    </style>
-    <script>
-      // 다크모드 유지
-      const theme = localStorage.getItem("theme");
-      if (theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-        document.documentElement.classList.add("dark");
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { ink:"#0b0f19", fog:"#f7f7fb", accent:"#4f46e5", ring:"#6366f1" },
+          boxShadow: { soft:"0 8px 30px rgba(0,0,0,.08)" }
+        }
       }
-    </script>
-  </head>
-  <body class="bg-fog text-ink dark:bg-[#0a0c10] dark:text-white antialiased">
-    <!-- 상단 네비 -->
-    <header class="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-black/30 border-b border-black/5 dark:border-white/10">
-      <div class="max-w-5xl mx-auto px-5 flex items-center justify-between h-14">
-        <a href="#" class="font-semibold tracking-tight">IH</a>
-        <nav class="hidden sm:flex gap-6 text-sm">
-          <a href="#projects" class="opacity-80 hover:opacity-100">Projects</a>
-          <a href="#skills" class="opacity-80 hover:opacity-100">Skills</a>
-          <a href="#contact" class="opacity-80 hover:opacity-100">Contact</a>
-        </nav>
-        <button id="themeToggle" class="rounded-lg px-3 py-1.5 text-sm border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">
-          🌙 / ☀️
-        </button>
+    };
+  </script>
+  <style>
+    .reveal { opacity: 0; transform: translateY(10px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.on { opacity: 1; transform: translateY(0); }
+    .tilt { transform-style: preserve-3d; transition: transform .15s ease; }
+    .tilt * { transform: translateZ(0); }
+    .glass { backdrop-filter: saturate(180%) blur(10px); }
+    .toast { animation: pop .2s ease forwards; }
+    @keyframes pop { from { transform: translateY(6px); opacity: 0 } to { transform: translateY(0); opacity: 1 } }
+  </style>
+
+  <!-- 초기 테마 동기화 -->
+  <script>
+    const saved = localStorage.getItem("theme"); const root = document.documentElement;
+    if (saved === "dark" || (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches)) root.classList.add("dark");
+  </script>
+</head>
+<body class="bg-fog text-ink dark:bg-[#0a0c10] dark:text-white antialiased selection:bg-accent/20">
+  <!-- Topbar -->
+  <header class="sticky top-0 z-40 border-b border-black/5 dark:border-white/10 glass bg-white/70 dark:bg-black/40">
+    <div class="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between">
+      <a href="#" class="font-semibold tracking-tight">IH</a>
+      <nav class="hidden sm:flex gap-6 text-sm">
+        <a href="#projects" class="opacity-80 hover:opacity-100">Projects</a>
+        <a href="#skills" class="opacity-80 hover:opacity-100">Skills</a>
+        <a href="#contact" class="opacity-80 hover:opacity-100">Contact</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <select id="themeSelect" class="text-sm rounded-lg px-2 py-1.5 border border-black/10 dark:border-white/20 bg-white/70 dark:bg-black/40">
+          <option value="auto">Auto</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+        <button id="cmdkBtn" class="rounded-lg px-3 py-1.5 text-sm border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">⌘K</button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <!-- Hero -->
-    <section class="max-w-5xl mx-auto px-5 pt-16 pb-10">
-      <div class="grid md:grid-cols-[1.1fr_.9fr] items-center gap-10">
-        <div>
-          <p class="text-sm uppercase tracking-[.2em] opacity-60 fade-up">Software Engineer</p>
-          <h1 class="text-4xl md:text-5xl font-bold leading-tight mt-3 fade-up delay-1">
-            Ian Hwang
-          </h1>
-          <p class="mt-4 text-[15px] leading-relaxed opacity-90 fade-up delay-2">
-            Next.js & TypeScript로 제품을 빠르게 검증하고, <span class="whitespace-nowrap">NestJS + PostgreSQL</span>로
-            탄탄하게 확장합니다. 현재는 실시간 스포츠 베팅 프론트엔드 <strong>Oddyssey</strong>와
-            중고거래 쇼케이스 <strong>GiveGet</strong>을 만드는 중.
-          </p>
-
-          <div class="mt-6 flex flex-wrap gap-3 fade-up delay-3">
-            <a href="#projects" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 bg-accent text-white hover:opacity-90">
-              살펴보기 <span aria-hidden>↘</span>
-            </a>
-            <a href="mailto:meen813@hotmail.com" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">
-              이메일
-            </a>
-            <a href="https://github.com/" target="_blank" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">
-              GitHub
-            </a>
-            <a href="https://www.linkedin.com/" target="_blank" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">
-              LinkedIn
-            </a>
-            <a href="./resume.pdf" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">
-              이력서 (PDF)
-            </a>
-          </div>
-        </div>
-
-        <!-- 아바타/미디어 -->
-        <div class="relative">
-          <div class="aspect-square rounded-2xl bg-gradient-to-br from-accent/15 to-transparent border border-black/10 dark:border-white/10 flex items-center justify-center">
-            <span class="text-6xl select-none">🧑‍💻</span>
-          </div>
-          <div class="absolute -bottom-3 -left-3 text-xs px-2 py-1 rounded-full bg-white dark:bg-black border border-black/10 dark:border-white/10 shadow/10">
-            Los Angeles, CA
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Projects -->
-    <section id="projects" class="max-w-5xl mx-auto px-5 pt-6 pb-14">
-      <div class="flex items-end justify-between gap-4 mb-6">
-        <h2 class="text-xl font-semibold">Projects</h2>
-        <a class="text-sm opacity-70 hover:opacity-100" href="https://github.com/" target="_blank">View on GitHub →</a>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-5">
-        <!-- Card 1 -->
-        <article class="card rounded-2xl border border-black/10 dark:border-white/10 p-5 bg-white dark:bg-black">
-          <div class="text-sm mb-2 opacity-70">Next.js / NestJS / Redis</div>
-          <h3 class="font-semibold">Oddyssey — Sports Betting (MVP)</h3>
-          <p class="text-sm mt-2 opacity-90">
-            실시간/다가오는 경기 분리, 베팅슬립(싱글/멀티), 잔액 추적, Prisma + PostgreSQL.
-          </p>
-          <div class="mt-4 flex items-center gap-3">
-            <a class="text-sm underline opacity-80 hover:opacity-100" href="#" target="_blank">Demo</a>
-            <a class="text-sm underline opacity-80 hover:opacity-100" href="#" target="_blank">Repo</a>
-          </div>
-        </article>
-
-        <!-- Card 2 -->
-        <article class="card rounded-2xl border border-black/10 dark:border-white/10 p-5 bg-white dark:bg-black">
-          <div class="text-sm mb-2 opacity-70">Next.js / TypeScript</div>
-          <h3 class="font-semibold">GiveGet — Barter Marketplace</h3>
-          <p class="text-sm mt-2 opacity-90">
-            커뮤니티 기반 물물교환 쇼케이스. 반응형 UI, 리스트/디테일, 즐겨찾기.
-          </p>
-          <div class="mt-4 flex items-center gap-3">
-            <a class="text-sm underline opacity-80 hover:opacity-100" href="#" target="_blank">Demo</a>
-            <a class="text-sm underline opacity-80 hover:opacity-100" href="#" target="_blank">Repo</a>
-          </div>
-        </article>
-
-        <!-- Card 3 -->
-        <article class="card rounded-2xl border border-black/10 dark:border-white/10 p-5 bg-white dark:bg-black">
-          <div class="text-sm mb-2 opacity-70">React / Tailwind</div>
-          <h3 class="font-semibold">JS Construction — Social App</h3>
-          <p class="text-sm mt-2 opacity-90">
-            인증(NextAuth), 포스트/댓글/북마크/팔로우, 다크모드, 고성능 검색.
-          </p>
-          <div class="mt-4 flex items-center gap-3">
-            <a class="text-sm underline opacity-80 hover:opacity-100" href="#" target="_blank">Demo</a>
-            <a class="text-sm underline opacity-80 hover:opacity-100" href="#" target="_blank">Repo</a>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- Skills -->
-    <section id="skills" class="max-w-5xl mx-auto px-5 pb-14">
-      <h2 class="text-xl font-semibold mb-6">Skills</h2>
-      <div class="flex flex-wrap gap-2">
-        <!-- 필요 시 추가/정렬 -->
-        <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">TypeScript</span>
-        <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">Next.js</span>
-        <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">React</span>
-        <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">NestJS</span>
-        <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">PostgreSQL</span>
-        <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">Prisma</span>
-        <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">Redis</span>
-        <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">Tailwind CSS</span>
-        <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">AWS</span>
-        <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">Docker</span>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="max-w-5xl mx-auto px-5 pb-24">
-      <div class="rounded-2xl border border-black/10 dark:border-white/10 p-6 bg-white dark:bg-black">
-        <h2 class="text-xl font-semibold">Contact</h2>
-        <p class="opacity-80 text-sm mt-2">
-          협업 제안 또는 구인 문의는 이메일로 연락 주세요.
+  <!-- Hero -->
+  <section class="max-w-5xl mx-auto px-5 pt-16 pb-10">
+    <div class="grid md:grid-cols-[1.1fr_.9fr] items-center gap-10">
+      <div class="reveal">
+        <p class="text-sm uppercase tracking-[.2em] opacity-60">Software Engineer</p>
+        <h1 class="text-4xl md:text-5xl font-bold leading-tight mt-3">Ian Hwang</h1>
+        <p class="mt-4 text-[15px] leading-relaxed opacity-90">
+          <span id="typewriter" class="border-r pr-1"></span>
         </p>
-        <div class="mt-4 flex flex-wrap gap-3">
-          <a href="mailto:meen813@hotmail.com" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 bg-accent text-white hover:opacity-90">Email</a>
-          <a href="tel:+15627546978" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">Call</a>
-          <a href="https://cal.com/" target="_blank" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">Schedule</a>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="#projects" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 bg-accent text-white hover:opacity-90">프로젝트 보기 ↘</a>
+          <button id="emailCopy" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">이메일 복사</button>
+          <a href="https://github.com/" target="_blank" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">GitHub</a>
+          <a href="https://www.linkedin.com/" target="_blank" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">LinkedIn</a>
+          <a href="./resume.pdf" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">이력서(PDF)</a>
         </div>
       </div>
-    </section>
-
-    <footer class="py-10 border-t border-black/5 dark:border-white/10">
-      <div class="max-w-5xl mx-auto px-5 text-sm opacity-70">
-        © <span id="year"></span> Ian Hwang. All rights reserved.
+      <div class="relative reveal">
+        <div class="aspect-square rounded-2xl bg-gradient-to-br from-accent/15 to-transparent border border-black/10 dark:border-white/10 flex items-center justify-center tilt" data-tilt>
+          <span class="text-6xl select-none">🧑‍💻</span>
+        </div>
+        <div class="absolute -bottom-3 -left-3 text-xs px-2 py-1 rounded-full bg-white dark:bg-black border border-black/10 dark:border-white/10 shadow">
+          Los Angeles, CA
+        </div>
       </div>
-    </footer>
+    </div>
+  </section>
 
-    <script>
-      // 다크모드 토글
-      const toggle = document.getElementById("themeToggle");
-      toggle.addEventListener("click", () => {
-        const root = document.documentElement;
-        const isDark = root.classList.toggle("dark");
-        localStorage.setItem("theme", isDark ? "dark" : "light");
+  <!-- Projects -->
+  <section id="projects" class="max-w-5xl mx-auto px-5 pt-6 pb-14">
+    <div class="flex items-end justify-between gap-4 mb-6 reveal">
+      <h2 class="text-xl font-semibold">Projects</h2>
+      <div class="flex items-center gap-2">
+        <button data-filter="all" class="filter-btn text-sm rounded-full px-3 py-1.5 border border-black/10 dark:border-white/20 bg-white/70 dark:bg-black/40">All</button>
+        <button data-filter="web" class="filter-btn text-sm rounded-full px-3 py-1.5 border border-black/10 dark:border-white/20">Web</button>
+        <button data-filter="app" class="filter-btn text-sm rounded-full px-3 py-1.5 border border-black/10 dark:border-white/20">App</button>
+        <button data-filter="oss" class="filter-btn text-sm rounded-full px-3 py-1.5 border border-black/10 dark:border-white/20">Open Source</button>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      <!-- Card 1 -->
+      <article class="project card rounded-2xl border border-black/10 dark:border-white/10 p-5 bg-white dark:bg-black shadow-soft reveal tilt" data-tags="web app" data-title="Oddyssey — Sports Betting">
+        <div class="text-sm mb-2 opacity-70">Next.js / NestJS / Redis</div>
+        <h3 class="font-semibold">Oddyssey — Sports Betting (MVP)</h3>
+        <p class="text-sm mt-2 opacity-90">실시간/다가오는 경기, 베팅슬립(싱글/멀티), 잔액 추적, Prisma + PostgreSQL.</p>
+        <div class="mt-4 flex items-center gap-3">
+          <button class="underline opacity-80 hover:opacity-100" data-modal-open data-modal="oddyssey">Preview</button>
+          <a class="underline opacity-80 hover:opacity-100" href="#" target="_blank">Repo</a>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="project card rounded-2xl border border-black/10 dark:border-white/10 p-5 bg-white dark:bg-black shadow-soft reveal tilt" data-tags="web oss" data-title="GiveGet — Barter Marketplace">
+        <div class="text-sm mb-2 opacity-70">Next.js / TypeScript</div>
+        <h3 class="font-semibold">GiveGet — Barter Marketplace</h3>
+        <p class="text-sm mt-2 opacity-90">커뮤니티 기반 물물교환 쇼케이스. 반응형 UI, 리스트/디테일, 즐겨찾기.</p>
+        <div class="mt-4 flex items-center gap-3">
+          <button class="underline opacity-80 hover:opacity-100" data-modal-open data-modal="giveget">Preview</button>
+          <a class="underline opacity-80 hover:opacity-100" href="#" target="_blank">Repo</a>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="project card rounded-2xl border border-black/10 dark:border-white/10 p-5 bg-white dark:bg-black shadow-soft reveal tilt" data-tags="app" data-title="JS Construction — Social App">
+        <div class="text-sm mb-2 opacity-70">React / Tailwind</div>
+        <h3 class="font-semibold">JS Construction — Social App</h3>
+        <p class="text-sm mt-2 opacity-90">인증(NextAuth), 포스트/댓글/북마크/팔로우, 다크모드, 고성능 검색.</p>
+        <div class="mt-4 flex items-center gap-3">
+          <button class="underline opacity-80 hover:opacity-100" data-modal-open data-modal="jsc">Preview</button>
+          <a class="underline opacity-80 hover:opacity-100" href="#" target="_blank">Repo</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" class="max-w-5xl mx-auto px-5 pb-14">
+    <h2 class="text-xl font-semibold mb-6 reveal">Skills</h2>
+    <div class="flex flex-wrap gap-2 reveal">
+      <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">TypeScript</span>
+      <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">Next.js</span>
+      <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">React</span>
+      <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">NestJS</span>
+      <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">PostgreSQL</span>
+      <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">Prisma</span>
+      <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">Redis</span>
+      <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">Tailwind CSS</span>
+      <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">AWS</span>
+      <span class="px-3 py-1 rounded-full text-sm border border-black/10 dark:border-white/20">Docker</span>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="max-w-5xl mx-auto px-5 pb-24">
+    <div class="rounded-2xl border border-black/10 dark:border-white/10 p-6 bg-white dark:bg-black reveal">
+      <h2 class="text-xl font-semibold">Contact</h2>
+      <p class="opacity-80 text-sm mt-2">협업/구인 문의는 이메일로 연락 주세요.</p>
+      <div class="mt-4 flex flex-wrap gap-3">
+        <a href="mailto:meen813@hotmail.com" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 bg-accent text-white hover:opacity-90">Email</a>
+        <a href="tel:+15627546978" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">Call</a>
+        <a href="https://cal.com/" target="_blank" class="inline-flex items-center gap-2 rounded-lg px-4 py-2 border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">Schedule</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-10 border-t border-black/5 dark:border-white/10">
+    <div class="max-w-5xl mx-auto px-5 text-sm opacity-70">© <span id="year"></span> Ian Hwang. All rights reserved.</div>
+  </footer>
+
+  <!-- 모달 (3개 예시) -->
+  <div id="modal" class="fixed inset-0 hidden items-center justify-center z-50">
+    <div class="absolute inset-0 bg-black/50" data-modal-close></div>
+    <div class="relative max-w-2xl w-[92%] rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#0b0f19] p-5 shadow-soft">
+      <div class="flex items-center justify-between mb-3">
+        <h3 id="modalTitle" class="font-semibold"></h3>
+        <button class="rounded-lg px-2 py-1 border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10" data-modal-close>닫기</button>
+      </div>
+      <div id="modalBody" class="space-y-3 text-sm opacity-90">
+        <!-- JS로 주입 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 명령 팔레트 -->
+  <div id="cmdk" class="fixed inset-0 hidden items-start justify-center pt-24 z-50">
+    <div class="absolute inset-0 bg-black/40" data-cmdk-close></div>
+    <div class="relative w-[92%] max-w-xl rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#0b0f19] p-3 shadow-soft">
+      <input id="cmdkInput" placeholder="Type a command…" class="w-full px-3 py-2 text-sm rounded-lg border border-black/10 dark:border-white/20 bg-white/70 dark:bg-black/40 outline-none focus:ring-2 focus:ring-ring" />
+      <ul id="cmdkList" class="mt-2 text-sm divide-y divide-black/5 dark:divide-white/10">
+        <!-- JS로 채움 -->
+      </ul>
+      <div class="mt-2 text-[12px] opacity-60">Enter로 실행 • Esc 닫기 • Ctrl/⌘+K 열기</div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 hidden px-3 py-2 rounded-lg text-sm bg-black text-white dark:bg-white dark:text-black"></div>
+
+  <script>
+    // ===== 공통 유틸 =====
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
+    const showToast = (msg) => {
+      const t = $("#toast"); t.textContent = msg; t.classList.remove("hidden"); t.classList.add("toast");
+      setTimeout(()=>{ t.classList.add("hidden"); t.classList.remove("toast"); }, 1600);
+    };
+
+    // ===== 타입라이터 =====
+    (function typewriter(){
+      const el = $("#typewriter");
+      const lines = [
+        "Next.js & TypeScript로 MVP를 빠르게 검증합니다.",
+        "NestJS + PostgreSQL로 확장 가능한 백엔드를 설계합니다.",
+        "실시간 스포츠 베팅 프론트엔드 ‘Oddyssey’를 만드는 중입니다."
+      ];
+      let i = 0, j = 0, erasing = false;
+      const tick = () => {
+        const full = lines[i];
+        if (!erasing) { j++; if (j >= full.length + 3) erasing = true; }
+        else { j--; if (j <= 0) { erasing = false; i = (i+1) % lines.length; } }
+        el.textContent = full.slice(0, Math.max(0,j));
+        setTimeout(tick, erasing ? 35 : 48);
+      };
+      tick();
+    })();
+
+    // ===== 스크롤 리빌 =====
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add("on"); });
+    }, { threshold: 0.12 });
+    $$(".reveal").forEach(el=>io.observe(el));
+
+    // ===== 3D 틸트 =====
+    const tiltEls = $$("[data-tilt]");
+    tiltEls.forEach(card=>{
+      card.addEventListener("mousemove", (e)=>{
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left)/r.width, y = (e.clientY - r.top)/r.height;
+        const rx = (y - 0.5) * -8, ry = (x - 0.5) * 8;
+        card.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg)`;
       });
-      // 연도
-      document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
-  </body>
+      card.addEventListener("mouseleave", ()=> card.style.transform = "perspective(700px) rotateX(0) rotateY(0)");
+    });
+
+    // ===== 프로젝트 필터 =====
+    const buttons = $$(".filter-btn");
+    const cards = $$(".project");
+    buttons.forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const tag = btn.dataset.filter;
+        buttons.forEach(b=>b.classList.remove("bg-white/70","dark:bg-black/40"));
+        btn.classList.add("bg-white/70","dark:bg-black/40");
+        cards.forEach(c=>{
+          const tags = c.dataset.tags.split(" ");
+          c.style.display = (tag === "all" || tags.includes(tag)) ? "" : "none";
+        });
+      });
+    });
+
+    // ===== 모달 =====
+    const MODAL_DATA = {
+      oddyssey: {
+        title: "Oddyssey — Sports Betting (MVP)",
+        body: `
+          <img src="https://picsum.photos/seed/oddyssey/960/420" alt="" class="rounded-lg border border-black/10 dark:border-white/10">
+          <p>실시간/다가오는 경기 분리, 베팅슬립(싱글/멀티), 잔액 추적, Prisma + PostgreSQL.</p>
+          <a href="#" target="_blank" class="inline-flex mt-2 underline">Demo / Repo</a>
+        `
+      },
+      giveget: {
+        title: "GiveGet — Barter Marketplace",
+        body: `
+          <img src="https://picsum.photos/seed/giveget/960/420" alt="" class="rounded-lg border border-black/10 dark:border-white/10">
+          <p>커뮤니티 기반 물물교환 쇼케이스. 반응형 UI, 리스트/디테일, 즐겨찾기.</p>
+          <a href="#" target="_blank" class="inline-flex mt-2 underline">Demo / Repo</a>
+        `
+      },
+      jsc: {
+        title: "JS Construction — Social App",
+        body: `
+          <img src="https://picsum.photos/seed/jsc/960/420" alt="" class="rounded-lg border border-black/10 dark:border-white/10">
+          <p>인증(NextAuth), 포스트/댓글/북마크/팔로우, 다크모드, 고성능 검색.</p>
+          <a href="#" target="_blank" class="inline-flex mt-2 underline">Demo / Repo</a>
+        `
+      }
+    };
+    const modal = $("#modal");
+    const openModal = (key)=>{
+      $("#modalTitle").textContent = MODAL_DATA[key].title;
+      $("#modalBody").innerHTML = MODAL_DATA[key].body;
+      modal.classList.remove("hidden"); modal.classList.add("flex");
+    };
+    const closeModal = ()=>{ modal.classList.add("hidden"); modal.classList.remove("flex"); };
+    $$("[data-modal-open]").forEach(b=>b.addEventListener("click", ()=> openModal(b.dataset.modal)));
+    $$("[data-modal-close]").forEach(b=>b.addEventListener("click", closeModal));
+    modal.addEventListener("click", (e)=>{ if(e.target === modal) closeModal(); });
+
+    // ===== 명령 팔레트 (Ctrl/⌘ + K) =====
+    const cmdk = $("#cmdk"), cmdkInput = $("#cmdkInput"), cmdkList = $("#cmdkList");
+    const COMMANDS = [
+      { label:"Open GitHub", action:()=>window.open("https://github.com/","_blank") },
+      { label:"Open LinkedIn", action:()=>window.open("https://www.linkedin.com/","_blank") },
+      { label:"Email Ian", action:()=>window.location.href="mailto:meen813@hotmail.com" },
+      { label:"Go to Projects", action:()=>location.hash="#projects" },
+      { label:"Go to Skills", action:()=>location.hash="#skills" },
+      { label:"Go to Contact", action:()=>location.hash="#contact" },
+      { label:"Toggle Dark Mode", action:()=>{ themeSelect.value = themeSelect.value==="dark"?"light":"dark"; themeSelect.dispatchEvent(new Event("change")); } }
+    ];
+    const renderCmdk = (q="")=>{
+      cmdkList.innerHTML = "";
+      COMMANDS.filter(c=>c.label.toLowerCase().includes(q.toLowerCase()))
+        .forEach(c=>{
+          const li = document.createElement("li");
+          li.className = "py-2 px-2 hover:bg-black/5 dark:hover:bg-white/10 cursor-pointer";
+          li.textContent = c.label;
+          li.onclick = ()=>{ c.action(); hideCmdk(); };
+          cmdkList.appendChild(li);
+        });
+    };
+    const showCmdk = ()=>{ cmdk.classList.remove("hidden"); cmdk.classList.add("flex"); renderCmdk(); cmdkInput.value=""; setTimeout(()=>cmdkInput.focus(), 0); };
+    const hideCmdk = ()=>{ cmdk.classList.add("hidden"); cmdk.classList.remove("flex"); };
+    $("#cmdkBtn").addEventListener("click", showCmdk);
+    cmdk.addEventListener("click", (e)=>{ if(e.target.hasAttribute("data-cmdk-close")) hideCmdk(); });
+    cmdkInput.addEventListener("input", e=>renderCmdk(e.target.value));
+    document.addEventListener("keydown", (e)=>{
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); showCmdk(); }
+      if (e.key === "Escape") hideCmdk();
+    });
+
+    // ===== 테마 선택 (Auto/Light/Dark) =====
+    const themeSelect = $("#themeSelect");
+    const applyTheme = (mode)=>{
+      if (mode === "dark") root.classList.add("dark");
+      else if (mode === "light") root.classList.remove("dark");
+      else { // auto
+        root.classList.toggle("dark", window.matchMedia("(prefers-color-scheme: dark)").matches);
+      }
+    };
+    themeSelect.value = localStorage.getItem("themeMode") || "auto";
+    applyTheme(themeSelect.value);
+    themeSelect.addEventListener("change", ()=>{
+      const v = themeSelect.value;
+      localStorage.setItem("themeMode", v);
+      if (v === "auto") localStorage.removeItem("theme"); // 옛 키 정리
+      applyTheme(v);
+    });
+
+    // ===== 이메일 복사 =====
+    $("#emailCopy").addEventListener("click", async ()=>{
+      try { await navigator.clipboard.writeText("meen813@hotmail.com"); showToast("이메일 주소가 복사되었습니다!"); }
+      catch { showToast("복사 실패. 길게 눌러 복사해주세요."); }
+    });
+
+    // ===== 연도 =====
+    $("#year").textContent = new Date().getFullYear();
+  </script>
+</body>
 </html>
